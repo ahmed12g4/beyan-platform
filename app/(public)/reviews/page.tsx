@@ -32,7 +32,7 @@ export default async function ReviewsPage() {
         if (!isDuplicate) {
             reviews.push({
                 ...fb,
-                avatar: fb.avatar || undefined,
+avatar: (fb as any).avatar || undefined,
                 date: fb.date ? fb.date.toUpperCase() : "15 AĞUSTOS 2024",
             });
         }
