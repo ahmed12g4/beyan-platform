@@ -1,0 +1,24 @@
+{
+    "common": {
+        "login": "Giriş Yap",
+        "register": "Kayıt Ol",
+        "logout": "Çıkış Yap",
+        "home": "Anasayfa",
+        "courses": "Kurslar",
+        "blog": "Blog",
+        "contact": "İletişim",
+        "search": "Ara...",
+        "loading": "Yükleniyor...",
+        "save": "Kaydet",
+        "cancel": "İptal",
+        "delete": "Sil",
+        "edit": "Düzenle"
+    },
+    "auth": {
+        "welcome_back": "Tekrar Hoşgeldiniz",
+        "create_account": "Hesap Oluştur",
+        "email": "E-posta",
+        "password": "Şifre",
+        "forgot_password": "Şifremi Unuttum"
+    }
+}

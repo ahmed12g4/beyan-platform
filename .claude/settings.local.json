@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npx tsc:*)",
+      "Bash(powershell:*)",
+      "Bash(\"c:\\\\Users\\\\Ziyad Dalil\\\\Desktop\\\\beyan-platform\\\\lib\\\\admin\\\\actions\\\\dashboard.ts\" << 'EOF'\n'use server'\n\nimport { createClient } from '@/lib/supabase/server'\nimport { redirect } from 'next/navigation'\n\ninterface DashboardStats {\n  totalUsers: number\n  totalStudents: number\n  totalTeachers: number\n  totalCourses: number\n  totalEnrollments: number\n  pendingComments: number\n}\n\nasync function verifyAdmin\\(\\) {\n  const supabase = await createClient\\(\\)\n  const { data: { user } } = await supabase.auth.getUser\\(\\)\n  if \\(!user\\) redirect\\('/giris'\\)\n  \n  const { data: roleData } = await supabase\n    .from\\('user_roles'\\)\n    .select\\('roles\\(name\\)'\\)\n    .eq\\('user_id', user.id\\)\n  \n  if \\(!roleData || roleData.length === 0\\) redirect\\('/'\\)\n  \n  const isAdmin = roleData.some\\(\\(item\\) => {\n    const roles = item.roles as unknown\n    return roles && typeof roles === 'object' && 'name' in roles && \\(roles as { name: string }\\).name === 'admin'\n  }\\)\n  \n  if \\(!isAdmin\\) redirect\\('/'\\)\n  return user\n}\n\nexport async function getDashboardStats\\(\\) {\n  try {\n    await verifyAdmin\\(\\)\n    const supabase = await createClient\\(\\)\n    \n    const { count: totalUsers } = await supabase.from\\('user_roles'\\).select\\('*', { count: 'exact', head: true }\\)\n    const { count: totalStudents } = await supabase.from\\('user_roles'\\).select\\('*, roles!inner\\(name\\)', { count: 'exact', head: true }\\).eq\\('roles.name', 'student'\\)\n    const { count: totalTeachers } = await supabase.from\\('user_roles'\\).select\\('*, roles!inner\\(name\\)', { count: 'exact', head: true }\\).eq\\('roles.name', 'teacher'\\)\n    const { count: totalCourses } = await supabase.from\\('courses'\\).select\\('*', { count: 'exact', head: true }\\)\n    const { count: totalEnrollments } = await supabase.from\\('enrollments'\\).select\\('*', { count: 'exact', head: true }\\)\n    const { count: pendingComments } = await supabase.from\\('comments'\\).select\\('*', { count: 'exact', head: true }\\).eq\\('is_approved', false\\)\n    \n    return {\n      success: true,\n      data: {\n        totalUsers: totalUsers || 0,\n        totalStudents: totalStudents || 0,\n        totalTeachers: totalTeachers || 0,\n        totalCourses: totalCourses || 0,\n        totalEnrollments: totalEnrollments || 0,\n        pendingComments: pendingComments || 0,\n      }\n    }\n  } catch \\(error\\) {\n    console.error\\('Dashboard stats error:', error\\)\n    return { success: false, error: 'İstatistikler yüklenirken hata oluştu' }\n  }\n}\nEOF)",
+      "Bash(npm run build:*)",
+      "Bash(npx supabase db push:*)",
+      "Bash(cd:*)",
+      "Bash(wc:*)",
+      "Bash(ls:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(python3:*)",
+      "Bash(npx next build:*)"
+    ]
+  }
+}

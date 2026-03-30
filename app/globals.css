@@ -1,0 +1,343 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   BRAND COLORS — Single source of truth
+   Edit the hex values below to retheme the entire platform.
+   ═══════════════════════════════════════════════════════════════
+
+   @theme  → generates Tailwind utilities:
+              bg-brand-primary, text-brand-accent, border-brand-primary/20 …
+
+   :root   → CSS variables for inline styles & THEME_CONFIG:
+              var(--brand-primary), var(--brand-accent) …
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Primary — dark teal */
+  --color-brand-primary: #204544;
+  --color-brand-primary-dark: #1a3736;
+  --color-brand-primary-hover: #2a5554;
+  --color-brand-primary-light: #f4f8f8;
+
+  /* Accent — warm yellow */
+  --color-brand-accent: #FEDD59;
+  --color-brand-accent-hover: #fdd835;
+}
+
+/* CSS variables for inline styles (style={{ color: 'var(--brand-primary)' }}) */
+:root {
+  --brand-primary: #204544;
+  --brand-primary-dark: #1a3736;
+  --brand-primary-hover: #2a5554;
+  --brand-primary-light: #f4f8f8;
+  --brand-accent: #FEDD59;
+  --brand-accent-hover: #fdd835;
+}
+
+@layer utilities {
+  /* Fade-only animation (no vertical movement) */
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  /* Unified entrance animation for main sections/cards */
+  .animate-slideUp {
+    animation: pageEnter 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  .animate-delay-700 {
+    animation-delay: 700ms;
+  }
+
+  .animate-page-enter {
+    animation: pageEnter 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  .animate-slideUpCard {
+    animation: pageEnter 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  .animate-modalIn {
+    animation: modalIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  .animate-backdropIn {
+    animation: backdropIn 0.2s ease-out forwards;
+  }
+
+  .animate-gentle-rise {
+    animation: pageEnter 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes backdropIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gentleRise {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #2C2C2C;
+  }
+
+
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+
+  body {
+    font-family: var(--font-inter), sans-serif;
+    color: var(--foreground);
+    background-color: var(--background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+  }
+
+
+  blockquote,
+  .italic-quote {
+    font-family: var(--font-lora), serif;
+    font-style: italic;
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.04em;
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 3.75rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    h1 {
+      font-size: 4.5rem;
+    }
+  }
+
+
+  h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.03em;
+  }
+
+  @media (min-width: 768px) {
+    h2 {
+      font-size: 2.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    h2 {
+      font-size: 3rem;
+    }
+  }
+
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.375;
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    h3 {
+      font-size: 1.875rem;
+    }
+  }
+
+  h4 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.375;
+    margin-bottom: 0.75rem;
+  }
+
+  @media (min-width: 768px) {
+    h4 {
+      font-size: 1.5rem;
+    }
+  }
+
+  p {
+    margin-bottom: 1.25rem;
+    line-height: 1.625;
+    font-weight: 400;
+    opacity: 0.92;
+  }
+
+  small {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+  padding-left: 100%;
+  /* Start from right */
+}
+
+/* Pause animation on hover */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Custom Scrollbar Utility */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Ensure elements with opacity-0 + animation become visible */
+  .animate-fadeIn,
+  .animate-slideUp,
+  .animate-page-enter,
+  .animate-slideUpCard,
+  .animate-gentle-rise,
+  .animate-modalIn {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
