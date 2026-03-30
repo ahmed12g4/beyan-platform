@@ -127,6 +127,8 @@ export default async function LevelDetailPage({ params }: { params: Promise<{ le
         .eq('is_published', true)
         .limit(6);
 
+    const typedCourses = (courses || []) as any[];
+
     return (
         <main className="min-h-screen bg-gray-50 pt-24 pb-16">
             {/* Hero Section */}
@@ -182,9 +184,9 @@ export default async function LevelDetailPage({ params }: { params: Promise<{ le
                                 <span className={`w-2 h-8 ${data.color.split(' ')[0]} rounded-full mr-4`}></span>
                                 Bu Seviyedeki Kurslar
                             </h2>
-                            {courses && courses.length > 0 ? (
+                            {typedCourses && typedCourses.length > 0 ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {courses.map((course) => (
+                                    {typedCourses.map((course) => (
                                         <Link
                                             key={course.id}
                                             href={`/kurslar/${course.slug}`}

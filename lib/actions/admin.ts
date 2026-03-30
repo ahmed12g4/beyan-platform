@@ -24,7 +24,7 @@ async function checkAdmin() {
         .eq('id', user.id)
         .single()
 
-    return profile?.role === 'admin'
+    return (profile as any)?.role === 'admin'
 }
 
 /**
@@ -41,8 +41,8 @@ export async function toggleUserStatus(userId: string, currentStatus: boolean): 
         const supabaseAdmin = await createAdminClient()
 
         // Update profile in DB
-        const { error } = await supabaseAdmin
-            .from('profiles')
+        const { error } = await (supabaseAdmin
+            .from('profiles') as any)
             .update({ is_active: newStatus })
             .eq('id', userId)
 
@@ -125,8 +125,8 @@ export async function updateUserRole(userId: string, newRole: string): Promise<A
         const newIsActive = newRole === 'teacher' ? false : true
 
         // ── 1. Update the profiles table (critical) ──────────────────────────
-        const { error: profileError } = await supabaseAdmin
-            .from('profiles')
+        const { error: profileError } = await (supabaseAdmin
+            .from('profiles') as any)
             .update({ role: newRole as any, is_active: newIsActive })
             .eq('id', userId)
 

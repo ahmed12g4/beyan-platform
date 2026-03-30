@@ -38,10 +38,11 @@ export default function TeacherCoursesPage() {
                 if (error) throw error
                 
                 // Format the enrollments count
-                const formattedData = (data || []).map(course => ({
-                    ...course,
-                    studentsCount: course.enrollments?.[0]?.count || 0
-                }))
+               const formattedData = (data || []).map((course: any) => ({
+    ...course,
+    studentsCount: course.enrollments?.[0]?.count || 0
+}))
+
                 
                 setCourses(formattedData)
             } catch (err) {

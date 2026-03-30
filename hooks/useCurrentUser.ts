@@ -54,15 +54,16 @@ export function useCurrentUser() {
                 .single();
 
             if (profileData) {
+                const pData = profileData as any;
                 setProfile({
-                    id: profileData.id,
+                    id: pData.id,
                     user_id: authUser.id,
-                    role: profileData.role || 'student',
-                    avatar_url: profileData.avatar_url || '',
-                    full_name: profileData.full_name || authUser.user_metadata?.full_name || '',
-                    email: profileData.email || authUser.email || '',
-                    phone: profileData.phone || '',
-                    bio: profileData.bio || '',
+                    role: pData.role || 'student',
+                    avatar_url: pData.avatar_url || '',
+                    full_name: pData.full_name || authUser.user_metadata?.full_name || '',
+                    email: pData.email || authUser.email || '',
+                    phone: pData.phone || '',
+                    bio: pData.bio || '',
                 });
             } else {
                 // Fallback to auth metadata if profile doesn't exist yet
@@ -113,15 +114,16 @@ export function useCurrentUser() {
             .single();
 
         if (profileData) {
+            const pData = profileData as any;
             setProfile({
-                id: profileData.id,
+                id: pData.id,
                 user_id: authUser.id,
-                role: profileData.role || 'student',
-                avatar_url: profileData.avatar_url || '',
-                full_name: profileData.full_name || '',
-                email: profileData.email || authUser.email || '',
-                phone: profileData.phone || '',
-                bio: profileData.bio || '',
+                role: pData.role || 'student',
+                avatar_url: pData.avatar_url || '',
+                full_name: pData.full_name || '',
+                email: pData.email || authUser.email || '',
+                phone: pData.phone || '',
+                bio: pData.bio || '',
             });
         }
     };

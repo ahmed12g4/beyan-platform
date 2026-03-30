@@ -186,9 +186,12 @@ export default function CourseWatchPage() {
                     .eq('lesson_id', activeLesson.id)
                     .maybeSingle()
                     .then(({ data }) => {
-                        setActiveQuizId(data?.id || null)
-                        setIsQuizLoading(false)
-                    })
+    const quizData = data as { id?: string } | null;
+
+    setActiveQuizId(quizData?.id || null);
+    setIsQuizLoading(false);
+})
+
             } else {
                 setActiveQuizId(null)
             }

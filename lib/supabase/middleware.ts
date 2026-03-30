@@ -254,7 +254,7 @@ export async function updateSession(request: NextRequest, response?: NextRespons
             .eq('id', 1)
             .single()
 
-        isMaintenanceMode = settings?.maintenance_mode || false
+        isMaintenanceMode = (settings as any)?.maintenance_mode || false
         maintenanceCached = { value: isMaintenanceMode, expiresAt: now + 30_000 }
     }
 

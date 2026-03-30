@@ -1,5 +1,5 @@
 
-import { createClient } from './lib/supabase/server';
+import { createClient } from '../lib/supabase/server';
 
 async function checkSchema() {
     const supabase = await createClient();

@@ -12,7 +12,7 @@ export async function sendMessageAction(receiverId: string, content: string) {
     }
 
     try {
-        const { error } = await supabase.from('messages').insert({
+        const { error } = await (supabase.from('messages') as any).insert({
             sender_id: user.id,
             receiver_id: receiverId,
             content,
@@ -91,11 +91,11 @@ export async function getRecentMessagesAction(limit = 5) {
 
     // Deduplicate by sender_id to show only 1 latest message per sender
     const seenSenders = new Set();
-    const uniqueMessages = [];
+    const uniqueMessages: any[] = [];
 
     for (const msg of (data || [])) {
-        if (!seenSenders.has(msg.sender_id)) {
-            seenSenders.add(msg.sender_id);
+        if (!seenSenders.has((msg as any).sender_id)) {
+            seenSenders.add((msg as any).sender_id);
             uniqueMessages.push(msg);
             if (uniqueMessages.length >= limit) break;
         }
@@ -110,8 +110,8 @@ export async function markAsReadAction(senderId: string) {
 
     if (!user) return;
 
-    await supabase
-        .from('messages')
+    await (supabase
+        .from('messages') as any)
         .update({ is_read: true })
         .eq('receiver_id', user.id)
         .eq('sender_id', senderId)

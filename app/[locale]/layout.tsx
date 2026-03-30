@@ -50,11 +50,12 @@ export default async function LocaleLayout({
                 <NextIntlClientProvider messages={messages}>
                     {settings?.announcement_bar_enabled && settings.announcement_text && (
                         <AnnouncementBar
-                            text={settings.announcement_text}
-                            color={settings.announcement_color}
-                            textColor={settings.announcement_text_color || undefined}
-                            marquee={settings.announcement_marquee}
-                        />
+    text={settings.announcement_text}
+    color={settings.announcement_color || '#000000'}
+    textColor={settings.announcement_text_color || undefined}
+marquee={settings.announcement_marquee ?? false}
+/>
+
                     )}
 
                     <Providers settings={settings}>

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -71,8 +71,8 @@ export default function LessonForm({ courseId, initialData, onClose, onSuccess }
         try {
             if (initialData?.id) {
                 // Update
-                const { error } = await supabase
-                    .from('lessons')
+                const { error } = await (supabase
+                    .from('lessons') as any)
                     .update({ ...data, updated_at: new Date().toISOString() })
                     .eq('id', initialData.id)
 
@@ -80,8 +80,8 @@ export default function LessonForm({ courseId, initialData, onClose, onSuccess }
                 toast.success('Ders güncellendi')
             } else {
                 // Create
-                const { error } = await supabase
-                    .from('lessons')
+                const { error, data: newLesson } = await (supabase
+                    .from('lessons') as any)
                     .insert({
                         ...data,
                         course_id: courseId,

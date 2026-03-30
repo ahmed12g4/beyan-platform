@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -223,9 +223,9 @@ export default function UserMessagesPage() {
             setMessages((data as Message[] || []).reverse());
 
             // Mark as read immediately
-            if (data?.some(m => !m.is_read && m.receiver_id === user.id)) {
-                await supabase
-                    .from('messages')
+            if ((data as any[])?.some(m => !m.is_read && m.receiver_id === user.id)) {
+                await (supabase
+                    .from('messages' as any) as any)
                     .update({ is_read: true })
                     .eq('sender_id', selectedUser.id)
                     .eq('receiver_id', user.id)
@@ -261,7 +261,7 @@ export default function UserMessagesPage() {
                         return [...prev, newMsg];
                     });
                     // Mark this specific message as read
-                    supabase.from('messages').update({ is_read: true }).eq('id', newMsg.id).then();
+                    (supabase.from('messages' as any) as any).update({ is_read: true }).eq('id', newMsg.id).then();
 
                     // Force the UI to show it as read immediately for the sender side
                     setMessages(prev => prev.map(m =>
@@ -309,7 +309,7 @@ export default function UserMessagesPage() {
         setNewMessage('');
 
         try {
-            const { data, error } = await supabase.from('messages').insert({
+            const { data, error } = await (supabase.from('messages' as any) as any).insert({
                 sender_id: user.id,
                 receiver_id: selectedUser.id,
                 content: optimisticMsg.content,

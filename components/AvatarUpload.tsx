@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
@@ -137,9 +137,9 @@ export default function AvatarUpload({ userId, currentAvatarUrl, userName, onUpl
 
             // Update user profile
             const { error: updateError } = await (supabase
-                .from('profiles')
-                .update({ avatar_url: publicUrl } as any)
-                .eq('id', userId) as any)
+                .from('profiles') as any)
+                .update({ avatar_url: publicUrl })
+                .eq('id', userId)
 
             if (updateError) throw new Error('Profil güncellenemedi.')
 
@@ -165,9 +165,9 @@ export default function AvatarUpload({ userId, currentAvatarUrl, userName, onUpl
             const supabase = createClient()
 
             const { error: updateError } = await (supabase
-                .from('profiles')
-                .update({ avatar_url: null } as any)
-                .eq('id', userId) as any)
+                .from('profiles') as any)
+                .update({ avatar_url: null })
+                .eq('id', userId)
 
             if (updateError) throw new Error('Profil güncellenemedi.')
 

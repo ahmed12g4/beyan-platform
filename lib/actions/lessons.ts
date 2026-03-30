@@ -68,7 +68,7 @@ export async function createLessonAction(courseId: string, input: LessonInput): 
             supabase.from('profiles').select('role').eq('id', user.id).single(),
         ])
         if (!course) return { success: false, error: 'Kurs bulunamadı' }
-        if (course.teacher_id !== user.id && profile?.role !== 'admin') {
+        if ((course as any).teacher_id !== user.id && (profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem: bu kursa ders ekleyemezsiniz' }
         }
 
@@ -81,11 +81,11 @@ export async function createLessonAction(courseId: string, input: LessonInput): 
             .limit(1)
 
         const nextOrderIndex = existingLessons && existingLessons.length > 0
-            ? existingLessons[0].order_index + 1
+            ? (existingLessons[0] as any).order_index + 1
             : 0
 
-        const { data, error } = await supabase
-            .from('lessons')
+        const { data, error } = await (supabase
+            .from('lessons') as any)
             .insert({
                 course_id: courseId,
                 title: validated.data.title,
@@ -127,10 +127,10 @@ export async function updateLessonAction(lessonId: string, input: Partial<Lesson
         if (!lesson) return { success: false, error: 'Ders bulunamadı' }
 
         const [{ data: course }, { data: profile }] = await Promise.all([
-            supabase.from('courses').select('teacher_id').eq('id', lesson.course_id).single(),
+            supabase.from('courses').select('teacher_id').eq('id', (lesson as any).course_id).single(),
             supabase.from('profiles').select('role').eq('id', user.id).single(),
         ])
-        if (course?.teacher_id !== user.id && profile?.role !== 'admin') {
+        if ((course as any)?.teacher_id !== user.id && (profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem: bu dersi düzenleyemezsiniz' }
         }
 
@@ -146,8 +146,8 @@ export async function updateLessonAction(lessonId: string, input: Partial<Lesson
         if (input.is_published !== undefined) updateData.is_published = input.is_published
         if (input.is_free_preview !== undefined) updateData.is_free_preview = input.is_free_preview
 
-        const { error } = await supabase
-            .from('lessons')
+        const { error } = await (supabase
+            .from('lessons') as any)
             .update(updateData)
             .eq('id', lessonId)
 
@@ -173,14 +173,14 @@ export async function deleteLessonAction(lessonId: string): Promise<ActionResult
         if (!lesson) return { success: false, error: 'Ders bulunamadı' }
 
         const [{ data: course }, { data: profile }] = await Promise.all([
-            supabase.from('courses').select('teacher_id').eq('id', lesson.course_id).single(),
+            supabase.from('courses').select('teacher_id').eq('id', (lesson as any).course_id).single(),
             supabase.from('profiles').select('role').eq('id', user.id).single(),
         ])
-        if (course?.teacher_id !== user.id && profile?.role !== 'admin') {
+        if ((course as any)?.teacher_id !== user.id && (profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem: bu dersi silemezsiniz' }
         }
-        const { error } = await supabase
-            .from('lessons')
+        const { error } = await (supabase
+            .from('lessons') as any)
             .delete()
             .eq('id', lessonId)
 
@@ -209,17 +209,17 @@ export async function reorderLessonsAction(
             if (!lesson) return { success: false, error: 'Ders bulunamadı' }
 
             const [{ data: course }, { data: profile }] = await Promise.all([
-                supabase.from('courses').select('teacher_id').eq('id', lesson.course_id).single(),
+                supabase.from('courses').select('teacher_id').eq('id', (lesson as any).course_id).single(),
                 supabase.from('profiles').select('role').eq('id', user.id).single(),
             ])
-            if (course?.teacher_id !== user.id && profile?.role !== 'admin') {
+            if ((course as any)?.teacher_id !== user.id && (profile as any)?.role !== 'admin') {
                 return { success: false, error: 'Yetkisiz işlem: bu dersleri sıralayamazsınız' }
             }
         }
 
         // Update each lesson's order_index
         const updates = lessons.map(({ id, order_index }) =>
-            supabase.from('lessons').update({ order_index }).eq('id', id)
+            (supabase.from('lessons') as any).update({ order_index }).eq('id', id)
         )
 
         const results = await Promise.all(updates)
@@ -246,16 +246,16 @@ export async function startLiveSessionAction(lessonId: string): Promise<ActionRe
         if (!lesson) return { success: false, error: 'Ders bulunamadı' }
 
         const [{ data: course }, { data: profile }] = await Promise.all([
-            supabase.from('courses').select('teacher_id').eq('id', lesson.course_id).single(),
+            supabase.from('courses').select('teacher_id').eq('id', (lesson as any).course_id).single(),
             supabase.from('profiles').select('role').eq('id', user.id).single(),
         ])
-        if (course?.teacher_id !== user.id && profile?.role !== 'admin') {
+        if ((course as any)?.teacher_id !== user.id && (profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem: bu dersi başlatamazsınız' }
         }
 
         // Start session (update status to LIVE)
-        const { error } = await supabase
-            .from('lessons')
+        const { error } = await (supabase
+            .from('lessons') as any)
             .update({ status: 'LIVE' as const })
             .eq('id', lessonId)
 

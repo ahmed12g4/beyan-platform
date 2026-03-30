@@ -80,8 +80,13 @@ export default function TeacherSessionsPage() {
             .limit(10);
 
         const combinedPast = [
-            ...(pastLive || []).map(s => ({ ...s, type: 'GROUP' })),
-            ...(pastBookings || []).map(b => ({ ...b, type: 'PRIVATE', title: `Özel Ders: ${b.profiles?.full_name}` }))
+...(pastLive || []).map((s: any) => ({ ...s, type: 'GROUP' })),
+            ...(pastBookings || []).map((b: any) => ({
+    ...b,
+    type: 'PRIVATE',
+    title: `Özel Ders: ${b.profiles?.full_name}`
+}))
+
         ].sort((a, b) => new Date(b.session_date || b.booking_date).getTime() - new Date(a.session_date || a.booking_date).getTime());
 
         setPastSessions(combinedPast);

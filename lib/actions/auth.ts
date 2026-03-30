@@ -97,7 +97,7 @@ export async function loginAction(
                 .eq('id', authData.user.id)
                 .single()
 
-            if (profile && profile.is_active === false) {
+            if (profile && (profile as any).is_active === false) {
                 await supabase.auth.signOut()
                 return {
                     success: false,
@@ -358,5 +358,5 @@ export async function getCurrentUser() {
 
 export async function getCurrentUserRole() {
     const profile = await getCurrentUser()
-    return profile?.role || null
+    return (profile as any)?.role || null
 }

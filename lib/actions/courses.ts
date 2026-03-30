@@ -154,12 +154,12 @@ export async function createCourseAction(input: CourseInput): Promise<ActionResu
         if (!user) return { success: false, error: 'Oturum bulunamadı' }
 
         const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-        if (profile?.role !== 'teacher' && profile?.role !== 'admin') {
+        if ((profile as any)?.role !== 'teacher' && (profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem: kurs oluşturmak için eğitmen olmalısınız' }
         }
 
-        const { data, error } = await supabase
-            .from('courses')
+        const { data, error } = await (supabase
+            .from('courses') as any)
             .insert({
                 ...validated.data,
                 teacher_id: user.id,
@@ -202,7 +202,7 @@ export async function updateCourseAction(courseId: string, input: Partial<Course
             supabase.from('profiles').select('role').eq('id', user.id).single(),
         ])
         if (!course) return { success: false, error: 'Kurs bulunamadı' }
-        if (course.teacher_id !== user.id && profile?.role !== 'admin') {
+        if ((course as any).teacher_id !== user.id && (profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem: bu kursu düzenleyemezsiniz' }
         }
         // ────────────────────────────────────────────────────────────────
@@ -221,8 +221,8 @@ export async function updateCourseAction(courseId: string, input: Partial<Course
         if (input.is_published !== undefined) updateData.is_published = input.is_published
         if (input.max_students !== undefined) updateData.max_students = input.max_students || null
 
-        const { error } = await supabase
-            .from('courses')
+        const { error } = await (supabase
+            .from('courses') as any)
             .update(updateData)
             .eq('id', courseId)
 
@@ -256,7 +256,7 @@ export async function deleteCourseAction(courseId: string): Promise<ActionResult
             supabase.from('profiles').select('role').eq('id', user.id).single(),
         ])
         if (!course) return { success: false, error: 'Kurs bulunamadı' }
-        if (course.teacher_id !== user.id && profile?.role !== 'admin') {
+        if ((course as any).teacher_id !== user.id && (profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem: bu kursu silemezsiniz' }
         }
         // ────────────────────────────────────────────────────────────────
@@ -291,13 +291,13 @@ export async function toggleCoursePublishAction(courseId: string, isPublished: b
             supabase.from('profiles').select('role').eq('id', user.id).single(),
         ])
         if (!course) return { success: false, error: 'Kurs bulunamadı' }
-        if (course.teacher_id !== user.id && profile?.role !== 'admin') {
+        if ((course as any).teacher_id !== user.id && (profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem' }
         }
         // ────────────────────────────────────────────────────────────────
 
-        const { error } = await supabase
-            .from('courses')
+        const { error } = await (supabase
+            .from('courses') as any)
             .update({ is_published: isPublished })
             .eq('id', courseId)
 
@@ -326,7 +326,7 @@ export async function uploadCourseThumbnailAction(courseId: string, formData: Fo
             supabase.from('profiles').select('role').eq('id', user.id).single(),
         ])
         if (!course) return { success: false, error: 'Kurs bulunamadı' }
-        if (course.teacher_id !== user.id && profile?.role !== 'admin') {
+        if ((course as any).teacher_id !== user.id && (profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem' }
         }
 
@@ -352,8 +352,8 @@ export async function uploadCourseThumbnailAction(courseId: string, formData: Fo
             .from('course-thumbnails')
             .getPublicUrl(filePath)
 
-        const { error: updateError } = await supabase
-            .from('courses')
+        const { error: updateError } = await (supabase
+            .from('courses') as any)
             .update({ thumbnail_url: publicUrl })
             .eq('id', courseId)
 

@@ -18,7 +18,7 @@ export async function getStudentEnrollments(studentId?: string) {
     // Check auth: only self or admin
     if (queryStudentId !== user.id) {
         const { data: profile } = await (supabase.from('profiles') as any).select('role').eq('id', user.id).single()
-        if (profile?.role !== 'admin') return []
+        if ((profile as any)?.role !== 'admin') return []
     }
 
     const { data, error } = await supabase
@@ -47,7 +47,7 @@ export async function getStudentProgress(studentId?: string) {
     // Check auth: only self or admin
     if (queryStudentId !== user.id) {
         const { data: profile } = await (supabase.from('profiles') as any).select('role').eq('id', user.id).single()
-        if (profile?.role !== 'admin') return []
+        if ((profile as any)?.role !== 'admin') return []
     }
 
     const { data, error } = await supabase
@@ -226,7 +226,7 @@ export async function adminEnrollStudentAction(studentId: string, courseId: stri
 
         // Explicit ADMIN check to prevent unauthorized access
         const { data: profile } = await (supabase.from('profiles') as any).select('role').eq('id', user.id).single()
-        if (profile?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' }
+        if ((profile as any)?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' }
 
         // SECURITY: Prevent a user from enrolling themselves into a paid course via this admin action
         if (studentId === user.id) {
@@ -289,7 +289,7 @@ export async function getCourseStudents(courseId: string) {
         (supabase.from('profiles') as any).select('role').eq('id', user.id).single(),
     ])
     if (!course) return []
-    if (course.teacher_id !== user.id && profile?.role !== 'admin') return []
+    if ((course as any).teacher_id !== user.id && (profile as any)?.role !== 'admin') return []
 
     const { data, error } = await supabase
         .from('enrollments')
@@ -416,7 +416,7 @@ export async function getLessonProgress(enrollmentId: string) {
             (supabase.from('courses') as any).select('teacher_id').eq('id', enrollment.course_id).single(),
             (supabase.from('profiles') as any).select('role').eq('id', user.id).single(),
         ])
-        if (course?.teacher_id !== user.id && profile?.role !== 'admin') return []
+        if ((course as any)?.teacher_id !== user.id && (profile as any)?.role !== 'admin') return []
     }
 
     const { data, error } = await supabase
@@ -438,7 +438,7 @@ export async function adminDropEnrollmentAction(studentId: string, courseId: str
 
         // Check ADMIN status
         const { data: profile } = await (supabase.from('profiles') as any).select('role').eq('id', user.id).single()
-        if (profile?.role !== 'admin') {
+        if ((profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkisiz işlem: sadece yöneticiler kayıt silebilir' }
         }
 

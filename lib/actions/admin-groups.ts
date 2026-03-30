@@ -21,7 +21,7 @@ async function checkAdmin() {
         .eq('id', user.id) as any)
         .single()
 
-    return profile?.role === 'admin'
+    return (profile as any)?.role === 'admin'
 }
 
 export async function getAdminGroups() {

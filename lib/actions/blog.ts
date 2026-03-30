@@ -53,7 +53,7 @@ export async function getAdminBlogPosts() {
     if (!user) return { success: false, error: 'Oturum açmalısınız' }
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-    if (profile?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' }
+    if ((profile as any)?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' }
 
     const { data, error } = await supabase
         .from('blog_posts')
@@ -78,7 +78,7 @@ export async function getBlogPostById(id: string): Promise<{ success: boolean; d
         .eq('id', user.id)
         .single();
 
-    if (profile?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' };
+    if ((profile as any)?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' };
 
     const { data, error } = await supabase
         .from('blog_posts')
@@ -99,7 +99,7 @@ export async function upsertBlogPost(id: string | null, input: BlogPostInput): P
     if (!user) return { success: false, error: 'Oturum açmalısınız' }
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-    if (profile?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' }
+    if ((profile as any)?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' }
 
     // Validate
     const validated = blogPostSchema.safeParse(input)
@@ -111,19 +111,19 @@ export async function upsertBlogPost(id: string | null, input: BlogPostInput): P
         ...validated.data,
         updated_at: new Date().toISOString(),
         published_at: validated.data.is_published ? (input.is_published ? new Date().toISOString() : null) : null
-    }
+    } as any
 
     let error;
 
     if (id && id !== 'new') {
-        const { error: updateError } = await supabase
-            .from('blog_posts')
+        const { error: updateError } = await (supabase
+            .from('blog_posts') as any)
             .update(postData)
             .eq('id', id)
         error = updateError
     } else {
-        const { error: insertError } = await supabase
-            .from('blog_posts')
+        const { error: insertError } = await (supabase
+            .from('blog_posts') as any)
             .insert(postData)
         error = insertError
     }
@@ -149,7 +149,7 @@ export async function deleteBlogPost(id: string) {
     if (!user) return { success: false, error: 'Oturum açmalısınız' }
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-    if (profile?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' }
+    if ((profile as any)?.role !== 'admin') return { success: false, error: 'Yetkisiz erişim' }
 
     const { error } = await supabase.from('blog_posts').delete().eq('id', id)
 
@@ -192,7 +192,7 @@ export async function getPublicBlogPostBySlug(slug: string) {
 
     // Sanitize HTML content before returning to prevent XSS
     return {
-        ...data,
-        content: sanitizeHtml(data.content ?? ''),
-    };
+        ...(data as any),
+        content: sanitizeHtml((data as any).content ?? ''),
+    } as any;
 }

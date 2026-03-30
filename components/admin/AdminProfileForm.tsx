@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -32,8 +32,8 @@ export default function AdminProfileForm() {
 
         try {
             const supabase = createClient()
-            const { error } = await supabase
-                .from('profiles')
+            const { error } = await (supabase
+                .from('profiles') as any)
                 .update({
                     full_name: formData.full_name,
                     phone: formData.phone || null,

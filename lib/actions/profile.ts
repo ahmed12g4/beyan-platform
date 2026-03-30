@@ -31,8 +31,8 @@ export async function updateProfileAction(input: UpdateProfileInput): Promise<Ac
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) return { success: false, error: 'Oturum bulunamadı' }
 
-        const { error } = await supabase
-            .from('profiles')
+        const { error } = await (supabase
+            .from('profiles') as any)
             .update({
                 full_name: validated.data.full_name,
                 phone: validated.data.phone || null,
@@ -87,8 +87,8 @@ export async function updateAvatarAction(formData: FormData): Promise<ActionResu
             .getPublicUrl(filePath)
 
         // Update profile with avatar URL
-        const { error: updateError } = await supabase
-            .from('profiles')
+        const { error: updateError } = await (supabase
+            .from('profiles') as any)
             .update({ avatar_url: publicUrl })
             .eq('id', user.id)
 
@@ -119,12 +119,12 @@ export async function adminUpdateUserAction(
             .eq('id', user.id)
             .single()
 
-        if (adminProfile?.role !== 'admin') {
+        if ((adminProfile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkiniz yok' }
         }
 
-        const { error } = await supabase
-            .from('profiles')
+        const { error } = await (supabase
+            .from('profiles') as any)
             .update(updates as any)
             .eq('id', userId)
 
@@ -150,7 +150,7 @@ export async function getAllUsers() {
         .eq('id', user.id)
         .single()
 
-    if (adminProfile?.role !== 'admin') {
+    if ((adminProfile as any)?.role !== 'admin') {
         return []
     }
 
@@ -176,7 +176,7 @@ export async function getUsersByRole(role: string) {
         .eq('id', user.id)
         .single()
 
-    if (adminProfile?.role !== 'admin') {
+    if ((adminProfile as any)?.role !== 'admin') {
         return []
     }
 
@@ -217,7 +217,7 @@ export async function deleteMyAccount(): Promise<ActionResult> {
 
         const { data: teacherCourses } = await supabaseAdmin.from('courses').select('id').eq('teacher_id', userId)
         if (teacherCourses && teacherCourses.length > 0) {
-            const courseIds = teacherCourses.map(c => c.id)
+            const courseIds = teacherCourses.map((c: any) => c.id)
             // Delete enrollments for my courses (where I am the teacher)
             await supabaseAdmin.from('enrollments').delete().in('course_id', courseIds)
             // Delete the courses themselves
@@ -233,7 +233,7 @@ export async function deleteMyAccount(): Promise<ActionResult> {
             .eq('student_id', userId)
 
         if (myEnrollments && myEnrollments.length > 0) {
-            const ids = myEnrollments.map(e => e.id)
+            const ids = myEnrollments.map((e: any) => e.id)
             await supabaseAdmin.from('lesson_progress').delete().in('enrollment_id', ids)
         }
 

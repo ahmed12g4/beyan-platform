@@ -23,7 +23,7 @@ async function checkAdmin() {
         .eq('id', user.id) as any)
         .single()
 
-    return profile?.role === 'admin'
+    return (profile as any)?.role === 'admin'
 }
 
 export async function getAdminTeachers() {
@@ -57,9 +57,9 @@ export async function toggleCoursePublish(courseId: string, currentStatus: boole
         const supabase = await createClient()
 
         const { error } = await (supabase
-            .from('courses' as any)
-            .update({ is_published: !currentStatus } as any)
-            .eq('id', courseId) as any)
+            .from('courses') as any)
+            .update({ is_published: !currentStatus })
+            .eq('id', courseId)
 
         if (error) throw error
 
@@ -185,12 +185,12 @@ export async function updateAdminCourseAction(courseId: string, input: CourseInp
         const supabase = await createClient()
 
         const { error } = await (supabase
-            .from('courses' as any)
+            .from('courses') as any)
             .update({
                 ...validated.data,
                 teacher_id: teacherId,
-            } as any)
-            .eq('id', courseId) as any)
+            })
+            .eq('id', courseId)
 
         if (error) {
             if (error.code === '23505') {

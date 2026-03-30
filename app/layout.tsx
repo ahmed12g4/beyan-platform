@@ -165,10 +165,10 @@ export default async function RootLayout({
 
                 {settings?.announcement_bar_enabled && settings.announcement_text && (
                     <AnnouncementBar
-                        text={settings.announcement_text}
-                        color={settings.announcement_color}
-                        textColor={settings.announcement_text_color || undefined}
-                        marquee={settings.announcement_marquee}
+                        text={settings.announcement_text as string}
+                        color={settings.announcement_color as string}
+                        textColor={settings.announcement_text_color as string}
+                        marquee={settings.announcement_marquee as boolean}
                     />
                 )}
 

@@ -29,27 +29,37 @@ export default function TeacherSettingsPage() {
             })
         }
     }, [userLoading, profile])
+const handleSaveProfile = async () => {
+    if (!profile?.id) return
 
-    const handleSaveProfile = async () => {
-        if (!profile?.id) return
-        setIsSaving(true)
-        setSaveSuccess(false)
+    setIsSaving(true)
+    setSaveSuccess(false)
 
-        const supabase = createClient()
-        await supabase
-            .from('profiles')
-            .update({
-                full_name: formData.full_name,
-                phone: formData.phone || null,
-                bio: formData.bio || null
-            })
-            .eq('id', profile.id)
+    const supabase = createClient()
 
-        await refreshProfile()
+    const { error } = await (supabase
+        .from('profiles') as any)
+        .update({
+            full_name: formData.full_name,
+            phone: formData.phone || null,
+            bio: formData.bio || null
+        })
+        .eq('id', profile.id)
+
+    if (error) {
+        console.error(error)
         setIsSaving(false)
-        setSaveSuccess(true)
-        setTimeout(() => setSaveSuccess(false), 3000)
+        return
     }
+
+    await refreshProfile()
+
+    setIsSaving(false)
+    setSaveSuccess(true)
+
+    setTimeout(() => setSaveSuccess(false), 3000)
+}
+
 
     if (userLoading) {
         return (

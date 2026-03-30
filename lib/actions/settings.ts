@@ -49,7 +49,7 @@ export async function updatePlatformSettingsAction(input: PlatformSettingsInput)
             .select('role')
             .eq('id', user.id)
             .single()
-        if (profile?.role !== 'admin') return { success: false, error: 'Yetkiniz yok' }
+        if ((profile as any)?.role !== 'admin') return { success: false, error: 'Yetkiniz yok' }
 
         const { error } = await (supabase
             .from('platform_settings' as any) as any)
@@ -141,7 +141,7 @@ export async function getAdminDashboardStats() {
     if (!user) return null
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-    if (profile?.role !== 'admin') return null
+    if ((profile as any)?.role !== 'admin') return null
 
     const [
         { count: totalUsers },
@@ -183,7 +183,7 @@ export async function getTeacherDashboardStats() {
     if (!user) return null
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-    if (profile?.role !== 'teacher' && profile?.role !== 'admin') return null
+    if ((profile as any)?.role !== 'teacher' && (profile as any)?.role !== 'admin') return null
 
     const [
         { count: totalCourses },
@@ -199,7 +199,7 @@ export async function getTeacherDashboardStats() {
     let activeStudents = 0
 
     if (courseIds && courseIds.length > 0) {
-        const ids = courseIds.map(c => c.id)
+        const ids = courseIds.map((c: any) => c.id)
         const [
             { count: enrolled },
             { count: active },
@@ -255,7 +255,7 @@ export async function uploadPlatformAsset(formData: FormData): Promise<{ success
             .eq('id', user.id)
             .single()
 
-        if (profile?.role !== 'admin') return { success: false, error: 'Yetkiniz yok' }
+        if ((profile as any)?.role !== 'admin') return { success: false, error: 'Yetkiniz yok' }
 
         const fileName = `platform-assets/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
         const arrayBuffer = await file.arrayBuffer()
@@ -305,7 +305,7 @@ export async function getStudentDashboardStats() {
     // Calculate overall progress
     let overallProgress = 0
     if (progressData && progressData.length > 0) {
-        const totalProgress = progressData.reduce((acc, p) => acc + (p.progress_percentage || 0), 0)
+        const totalProgress = progressData.reduce((acc, p: any) => acc + (p.progress_percentage || 0), 0)
         overallProgress = Math.round(totalProgress / progressData.length)
     }
 
@@ -313,6 +313,6 @@ export async function getStudentDashboardStats() {
         enrolledCourses: enrolledCourses || 0,
         completedCourses: completedCourses || 0,
         overallProgress,
-        totalLessonsCompleted: progressData?.reduce((acc, p) => acc + (p.completed_lessons || 0), 0) || 0,
+        totalLessonsCompleted: progressData?.reduce((acc, p: any) => acc + (p.completed_lessons || 0), 0) || 0,
     }
 }

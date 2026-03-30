@@ -1,5 +1,5 @@
 
-import { createClient } from './lib/supabase/server';
+import { createClient } from '../lib/supabase/server';
 
 async function testBanner() {
     const supabase = await createClient();
@@ -14,14 +14,14 @@ async function testBanner() {
 
     const { data: course } = await supabase.from('courses').select('id').limit(1).single();
 
-    const { data, error } = await supabase.from('live_sessions').insert({
+    const { data, error } = await (supabase.from('live_sessions') as any).insert({
         title: "Test Live Session",
         description: "Checking if the banner works!",
         session_date: startTime.toISOString(),
         duration_minutes: 60,
         meet_url: "https://meet.google.com/test",
-        teacher_id: teacher.id,
-        course_id: course?.id,
+        teacher_id: (teacher as any).id,
+        course_id: (course as any)?.id,
         status: 'SCHEDULED'
     }).select();
 

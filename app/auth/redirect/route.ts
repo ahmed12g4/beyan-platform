@@ -21,7 +21,7 @@ export async function GET(request: Request) {
         .from('profiles')
         .select('role')
         .eq('id', user.id)
-        .single()
+        .single() as any
 
     const role = profile?.role || 'student'
 

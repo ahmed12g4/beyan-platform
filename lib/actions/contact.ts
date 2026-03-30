@@ -58,7 +58,7 @@ export async function submitContactForm(prevState: ContactFormState, formData: F
 
     try {
         // 1. Insert into contact_messages
-        const { error } = await supabase.from('contact_messages' as any).insert({
+        const { error } = await (supabase.from('contact_messages') as any).insert({
             full_name: fullName,
             email,
             subject,
@@ -92,7 +92,7 @@ export async function deleteContactMessage(id: string) {
     if (!user) return { success: false, error: 'Oturum bulunamadı' }
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-    if (profile?.role !== 'admin') {
+    if ((profile as any)?.role !== 'admin') {
         return { success: false, error: 'Yetkisiz erişim' }
     }
 
@@ -112,12 +112,12 @@ export async function markAsRead(id: string) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { success: false, error: 'Oturum bulunamadı' }
 
-    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-    if (profile?.role !== 'admin') {
+    const { data: profile } = await (supabase.from('profiles') as any).select('role').eq('id', user.id).single()
+    if ((profile as any)?.role !== 'admin') {
         return { success: false, error: 'Yetkisiz erişim' }
     }
 
-    const { error } = await supabase.from('contact_messages' as any).update({ is_read: true }).eq('id', id)
+    const { error } = await (supabase.from('contact_messages') as any).update({ is_read: true }).eq('id', id)
 
     if (error) {
         console.error('Mark as read error:', error)

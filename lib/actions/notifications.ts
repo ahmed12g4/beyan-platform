@@ -66,8 +66,8 @@ export async function markNotificationAsRead(notificationId: string) {
 
         if (!user) return { success: false, error: 'Oturum bulunamadı' };
 
-        const { error } = await supabase
-            .from('notifications')
+        const { error } = await (supabase
+            .from('notifications') as any)
             .update({ is_read: true })
             .eq('id', notificationId)
             .eq('user_id', user.id);
@@ -91,8 +91,8 @@ export async function markAllNotificationsAsRead() {
 
         if (!user) return { success: false, error: 'Oturum bulunamadı' };
 
-        const { error } = await supabase
-            .from('notifications')
+        const { error } = await (supabase
+            .from('notifications') as any)
             .update({ is_read: true })
             .eq('user_id', user.id)
             .eq('is_read', false);
@@ -130,7 +130,7 @@ export async function createBroadcastNotification(input: {
             .eq('id', user.id)
             .single();
 
-        if (profile?.role !== 'admin') {
+        if ((profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkiniz yok' };
         }
 
@@ -141,8 +141,8 @@ export async function createBroadcastNotification(input: {
 
         if (input.targetRole === 'specific' && input.targetUserId) {
             // For a single user, use standard insert
-            const { error: insertError } = await adminSupabase
-                .from('notifications')
+            const { error: insertError } = await (adminSupabase
+                .from('notifications') as any)
                 .insert({
                     user_id: input.targetUserId,
                     sender_id: user.id,
@@ -182,7 +182,7 @@ export async function createBroadcastNotification(input: {
                 const { data: users } = await query;
                 if (!users || users.length === 0) return { success: false, error: 'Hedef kullanıcı bulunamadı' };
 
-                const notificationsToInsert = users.map(u => ({
+                const notificationsToInsert = users.map((u: any) => ({
                     user_id: u.id,
                     sender_id: user.id,
                     title: input.title,
@@ -197,7 +197,7 @@ export async function createBroadcastNotification(input: {
                 const chunkSize = 1000;
                 for (let i = 0; i < notificationsToInsert.length; i += chunkSize) {
                     const chunk = notificationsToInsert.slice(i, i + chunkSize);
-                    await adminSupabase.from('notifications').insert(chunk as any);
+                    await (adminSupabase.from('notifications') as any).insert(chunk as any);
                 }
             }
         }
@@ -224,7 +224,7 @@ export async function getAdminBroadcasts() {
             .eq('id', user.id)
             .single();
 
-        if (profile?.role !== 'admin') {
+        if ((profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkiniz yok' };
         }
 
@@ -266,7 +266,7 @@ export async function getAdminBroadcasts() {
 
         // Group by batch_id locally
         const groupedMap = new Map<string, any>();
-        data.forEach(notif => {
+        data.forEach((notif: any) => {
             const bId = notif.batch_id || notif.id; // fallback if no batch_id
             if (!groupedMap.has(bId)) {
                 groupedMap.set(bId, {
@@ -283,7 +283,7 @@ export async function getAdminBroadcasts() {
             }
         });
 
-        const groupedData = Array.from(groupedMap.values()).sort((a, b) =>
+        const groupedData = Array.from(groupedMap.values()).sort((a: any, b: any) =>
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
 
@@ -308,7 +308,7 @@ export async function deleteBroadcast(batchId: string) {
             .eq('id', user.id)
             .single();
 
-        if (profile?.role !== 'admin') {
+        if ((profile as any)?.role !== 'admin') {
             return { success: false, error: 'Yetkiniz yok' };
         }
 
@@ -318,8 +318,8 @@ export async function deleteBroadcast(batchId: string) {
         const adminSupabase = await createAdminClient();
 
         // We delete by batch_id OR fallback by id
-        const { error } = await adminSupabase
-            .from('notifications')
+        const { error } = await (adminSupabase
+            .from('notifications') as any)
             .delete()
             .or(`batch_id.eq.${batchId},id.eq.${batchId}`);
 

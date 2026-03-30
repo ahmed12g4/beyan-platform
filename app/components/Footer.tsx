@@ -17,7 +17,7 @@ export default function Footer() {
     const socialFacebook = settings?.social_facebook;
     const socialInstagram = settings?.social_instagram;
     const socialLinkedin = settings?.social_linkedin;
-    const socialWhatsapp = settings?.social_whatsapp;
+    const socialWhatsapp = (settings as any)?.social_whatsapp;
 
     const scrollToTop = () => {
         if (typeof window !== "undefined") {

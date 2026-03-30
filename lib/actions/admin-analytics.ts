@@ -13,7 +13,7 @@ export async function getAdminAnalyticsAction() {
             .select('amount, created_at')
             .eq('status', 'success')
 
-        const totalRevenue = payments?.reduce((sum, p) => sum + Number(p.amount), 0) || 0
+        const totalRevenue = (payments as any[])?.reduce((sum, p) => sum + Number(p.amount), 0) || 0
 
         // 2. Monthly Revenue (Last 6 Months)
         const monthlyRevenue = []
@@ -22,11 +22,12 @@ export async function getAdminAnalyticsAction() {
             const start = startOfMonth(date).toISOString()
             const end = endOfMonth(date).toISOString()
 
-            const monthPayments = payments?.filter(p => 
-                p.created_at >= start && p.created_at <= end
-            ) || []
+            const monthPayments = payments?.filter(p => {
+                const pAny = p as any;
+                return pAny.created_at >= start && pAny.created_at <= end
+            }) || []
 
-            const amount = monthPayments.reduce((sum, p) => sum + Number(p.amount), 0)
+            const amount = (monthPayments as any[]).reduce((sum, p) => sum + Number(p.amount), 0)
             monthlyRevenue.push({
                 month: format(date, 'MMM'),
                 amount

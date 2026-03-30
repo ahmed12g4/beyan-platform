@@ -28,13 +28,15 @@ export default function EmailConfirmedPage() {
             const { data: { user } } = await supabase.auth.getUser()
             if (user) {
                 const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', user.id)
-                    .single()
-                if (profile?.role) {
-                    setUserRole(profile.role)
-                }
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+if ((profile as any)?.role) {
+    setUserRole((profile as any).role)
+}
+
             }
         }
         getRole()
